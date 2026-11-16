@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lino — парфюмерия</title>
+<meta name="description" content="Lino — магазин оригинальной парфюмерии. Найдите свой аромат.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf6f0;
+    --bg-alt: #f1e9dd;
+    --ink: #1f1a17;
+    --muted: #6f655c;
+    --gold: #b08d57;
+    --gold-dark: #8a6a3b;
+    --card: #ffffff;
+    --line: #e4d9c8;
+    --dark: #17120f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  .serif { font-family: "Cormorant Garamond", Georgia, serif; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(250, 246, 240, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 500; letter-spacing: 6px; }
+  .nav-links { display: flex; gap: 28px; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .nav-links a:hover { color: var(--gold-dark); }
+
+  /* Buttons */
+  .btn {
+    display: inline-block; padding: 15px 34px;
+    font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+    border: 1px solid var(--ink); transition: all .25s;
+  }
+  .btn-dark { background: var(--ink); color: #fff; }
+  .btn-dark:hover { background: var(--gold-dark); border-color: var(--gold-dark); }
+  .btn-light:hover { background: var(--ink); color: #fff; }
+
+  /* Hero */
+  .hero { padding: 80px 0 90px; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
+  .eyebrow { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 18px; }
+  .hero h1 { font-family: "Cormorant Garamond", serif; font-weight: 400; font-size: clamp(44px, 7vw, 80px); line-height: 1.05; margin-bottom: 24px; }
+  .hero h1 em { color: var(--gold-dark); }
+  .hero p { color: var(--muted); font-size: 17px; max-width: 460px; margin-bottom: 36px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-art { position: relative; display: flex; justify-content: center; }
+  .hero-art::before {
+    content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%;
+    background: radial-gradient(circle, #ecdcc2 0%, rgba(236,220,194,0) 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
+  .hero-art svg { position: relative; width: 100%; max-width: 340px; height: auto; }
+
+  /* Strip */
+  .strip { background: var(--dark); color: #e9dcc6; }
+  .strip .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding-top: 28px; padding-bottom: 28px; text-align: center; }
+  .strip b { display: block; font-family: "Cormorant Garamond", serif; font-size: 22px; font-weight: 500; color: #fff; }
+  .strip span { font-size: 13px; letter-spacing: 1px; }
+
+  /* Sections */
+  section { padding: 96px 0; }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head h2 { font-family: "Cormorant Garamond", serif; font-weight: 400; font-size: clamp(36px, 5vw, 52px); }
+  .section-head p { color: var(--muted); margin-top: 10px; }
+
+  /* Filters */
+  .filters { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+  .filters button {
+    font: inherit; font-size: 13px; letter-spacing: 1px; padding: 9px 20px; cursor: pointer;
+    background: transparent; border: 1px solid var(--line); color: var(--ink); border-radius: 30px;
+  }
+  .filters button.active, .filters button:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* Products */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .card { background: var(--card); border: 1px solid var(--line); transition: transform .3s, box-shadow .3s; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(60, 40, 20, .08); }
+  .card-img { aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; }
+  .card-img svg { width: 46%; height: auto; }
+  .tag { position: absolute; top: 14px; left: 14px; background: var(--ink); color: #fff; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 10px; }
+  .card-body { padding: 22px 24px 26px; display: flex; flex-direction: column; flex: 1; }
+  .card-body .kind { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dark); }
+  .card-body h3 { font-family: "Cormorant Garamond", serif; font-size: 28px; font-weight: 500; margin: 4px 0 6px; }
+  .notes { color: var(--muted); font-size: 14px; margin-bottom: 18px; flex: 1; }
+  .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .price { font-family: "Cormorant Garamond", serif; font-size: 26px; font-weight: 600; }
+  .price small { font-family: "Montserrat", sans-serif; font-size: 12px; color: var(--muted); font-weight: 400; }
+  .order { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; padding: 10px 16px; background: var(--ink); color: #fff; transition: background .2s; }
+  .order:hover { background: var(--gold-dark); }
+
+  /* About */
+  .about { background: var(--bg-alt); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .about h2 { font-family: "Cormorant Garamond", serif; font-weight: 400; font-size: clamp(36px, 5vw, 50px); line-height: 1.1; margin-bottom: 22px; }
+  .about p { color: var(--muted); margin-bottom: 16px; }
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .feature { background: var(--card); padding: 26px 22px; border: 1px solid var(--line); }
+  .feature .num { font-family: "Cormorant Garamond", serif; font-size: 38px; color: var(--gold); line-height: 1; }
+  .feature h4 { font-weight: 500; font-size: 15px; margin: 10px 0 4px; }
+  .feature p { font-size: 13px; margin: 0; }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; counter-reset: s; }
+  .step { text-align: center; padding: 10px 20px; }
+  .step::before {
+    counter-increment: s; content: counter(s);
+    display: inline-flex; width: 58px; height: 58px; border-radius: 50%; align-items: center; justify-content: center;
+    border: 1px solid var(--gold); color: var(--gold-dark); font-family: "Cormorant Garamond", serif; font-size: 26px; margin-bottom: 18px;
+  }
+  .step h4 { font-weight: 500; font-size: 16px; margin-bottom: 6px; }
+  .step p { color: var(--muted); font-size: 14px; }
+
+  /* Contact */
+  .contact { background: var(--dark); color: #e9dcc6; text-align: center; }
+  .contact h2 { font-family: "Cormorant Garamond", serif; font-weight: 400; font-size: clamp(38px, 5vw, 56px); color: #fff; margin-bottom: 14px; }
+  .contact p { margin-bottom: 34px; }
+  .contact-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
+  .contact .btn { border-color: #e9dcc6; color: #fff; }
+  .contact .btn:hover { background: var(--gold); border-color: var(--gold); }
+  .contact .btn-gold { background: var(--gold); border-color: var(--gold); }
+  .contact .btn-gold:hover { background: var(--gold-dark); border-color: var(--gold-dark); }
+  .contact-info { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; font-size: 14px; }
+  .contact-info b { display: block; color: #fff; font-weight: 500; letter-spacing: 1px; margin-bottom: 2px; }
+
+  footer { background: var(--dark); color: #8c8174; text-align: center; font-size: 12px; padding: 22px 0 30px; border-top: 1px solid #2c241e; }
+
+  /* Mobile */
+  @media (max-width: 860px) {
+    .hero-grid, .about-grid { grid-template-columns: 1fr; }
+    .hero { padding: 48px 0 64px; text-align: center; }
+    .hero p { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+    .hero-art { order: -1; }
+    .hero-art svg { max-width: 220px; }
+    .hero-art::before { width: 260px; height: 260px; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .steps { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    section { padding: 70px 0; }
+  }
+  @media (max-width: 540px) {
+    .wrap { padding: 0 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .strip .wrap { grid-template-columns: 1fr; gap: 14px; }
+    .features { grid-template-columns: 1fr; }
+    .btn { padding: 14px 26px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo">LINO</a>
+    <nav class="nav-links">
+      <a href="#catalog">Каталог</a>
+      <a href="#about">О нас</a>
+      <a href="#how">Как заказать</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Парфюмерный магазин</div>
+      <h1>Найдите свой <em>аромат</em></h1>
+      <p>Оригинальная парфюмерия для неё и для него. Поможем подобрать аромат, который станет вашей визитной карточкой.</p>
+      <div class="hero-actions">
+        <a href="#catalog" class="btn btn-dark">Смотреть каталог</a>
+        <a href="#contact" class="btn btn-light">Консультация</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <!-- Hero bottle illustration (replace with a real product photo later) -->
+      <svg viewBox="0 0 200 280" aria-hidden="true">
+        <defs>
+          <linearGradient id="hg" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#f3e3c3"/>
+            <stop offset="1" stop-color="#c79f63"/>
+          </linearGradient>
+          <linearGradient id="hc" x1="0" x2="1">
+            <stop offset="0" stop-color="#2a221c"/>
+            <stop offset="1" stop-color="#4a3c30"/>
+          </linearGradient>
+        </defs>
+        <rect x="78" y="18" width="44" height="46" rx="4" fill="url(#hc)"/>
+        <rect x="88" y="62" width="24" height="16" fill="#b08d57"/>
+        <rect x="30" y="76" width="140" height="190" rx="18" fill="url(#hg)" opacity=".95"/>
+        <rect x="42" y="88" width="16" height="160" rx="8" fill="#fff" opacity=".35"/>
+        <rect x="52" y="150" width="96" height="54" fill="#fff" opacity=".85"/>
+        <text x="100" y="178" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="20" letter-spacing="4" fill="#1f1a17">LINO</text>
+        <text x="100" y="194" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" letter-spacing="1.5" fill="#6f655c">EAU DE PARFUM</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <div><b>100% оригинал</b><span>Только проверенные поставщики</span></div>
+    <div><b>Быстрая доставка</b><span>По городу и по всей стране</span></div>
+    <div><b>Подбор аромата</b><span>Бесплатная консультация</span></div>
+  </div>
+</div>
+
+<section id="catalog">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Каталог ароматов</h2>
+      <p>Нажмите «Заказать» — и мы ответим в WhatsApp</p>
+    </div>
+    <div class="filters">
+      <button class="active" data-filter="all">Все</button>
+      <button data-filter="women">Для неё</button>
+      <button data-filter="men">Для него</button>
+      <button data-filter="unisex">Унисекс</button>
+    </div>
+    <div class="grid" id="products"></div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow">О нас</div>
+      <h2>Lino — аромат, который запоминается</h2>
+      <p>Мы собрали коллекцию ароматов, которые любим сами: от лёгких цветочных до глубоких восточных.</p>
+      <p>Каждый флакон — оригинал. Не знаете, что выбрать? Напишите нам, и мы подберём аромат под ваш характер, сезон или в подарок.</p>
+    </div>
+    <div class="features">
+      <div class="feature"><div class="num">01</div><h4>Оригинал</h4><p>Гарантия подлинности каждого флакона</p></div>
+      <div class="feature"><div class="num">02</div><h4>Пробники</h4><p>Попробуйте аромат перед покупкой</p></div>
+      <div class="feature"><div class="num">03</div><h4>Подарочная упаковка</h4><p>Красиво упакуем для подарка</p></div>
+      <div class="feature"><div class="num">04</div><h4>Честные цены</h4><p>Без лишних наценок</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Как заказать</h2>
+      <p>Всего три простых шага</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h4>Выберите аромат</h4><p>Посмотрите каталог или попросите консультацию</p></div>
+      <div class="step"><h4>Напишите нам</h4><p>Нажмите «Заказать» — откроется WhatsApp с готовым сообщением</p></div>
+      <div class="step"><h4>Получите заказ</h4><p>Доставим по городу или отправим в ваш регион</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Свяжитесь с нами</h2>
+    <p>Ответим на вопросы и поможем выбрать аромат</p>
+    <div class="contact-btns">
+      <a class="btn btn-gold" id="wa-main" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn" id="ig-main" target="_blank" rel="noopener">Instagram</a>
+      <a class="btn" id="tg-main" target="_blank" rel="noopener">Telegram</a>
+    </div>
+    <div class="contact-info">
+      <div><b>Адрес</b><span id="addr"></span></div>
+      <div><b>Телефон</b><span id="phone"></span></div>
+      <div><b>Часы работы</b><span id="hours"></span></div>
+    </div>
+  </div>
+</section>
+
+<footer>© <span id="year"></span> Lino. Все права защищены.</footer>
+
+<script>
+  /* ============================================================
+     SHOP SETTINGS — change these to your real details
+     ============================================================ */
+  const SHOP = {
+    whatsapp: "996700000000",          // phone number for WhatsApp, digits only, with country code
+    phone: "+996 700 000 000",
+    instagram: "lino.parfum",          // Instagram username (placeholder)
+    telegram: "lino_parfum",           // Telegram username (placeholder)
+    address: "г. Бишкек, ул. Примерная, 1",
+    hours: "Ежедневно 10:00 – 21:00",
+    currency: "сом"
+  };
+
+  /* ============================================================
+     PRODUCTS — replace with your real perfumes and prices
+     type: "women", "men" or "unisex"
+     color: bottle colour; image: path to a photo (optional)
+     ============================================================ */
+  const PRODUCTS = [
+    { name: "Rose Velvet",  type: "women",  notes: "Роза, пион, белый мускус",        price: 3500, volume: "50 мл",  color: "#e8b4b8", tag: "Хит" },
+    { name: "Oud Noir",     type: "men",    notes: "Уд, кожа, амбра, ваниль",          price: 4800, volume: "100 мл", color: "#3b2f2a" },
+    { name: "Citrus Bloom", type: "unisex", notes: "Бергамот, нероли, зелёный чай",    price: 2900, volume: "50 мл",  color: "#e9d38a", tag: "Новинка" },
+    { name: "Vanilla Silk", type: "women",  notes: "Ваниль, жасмин, сандал",           price: 3900, volume: "75 мл",  color: "#e7d2b0" },
+    { name: "Ocean Blue",   type: "men",    notes: "Морская соль, лаванда, кедр",      price: 3200, volume: "100 мл", color: "#7ea6c4" },
+    { name: "Amber Night",  type: "unisex", notes: "Амбра, шафран, пачули",            price: 4500, volume: "75 мл",  color: "#b5733d", tag: "Хит" }
+  ];
+
+  const typeLabel = { women: "Для неё", men: "Для него", unisex: "Унисекс" };
+
+  function waLink(text) {
+    return "https://wa.me/" + SHOP.whatsapp + "?text=" + encodeURIComponent(text);
+  }
+
+  function bottle(color) {
+    return `<svg viewBox="0 0 100 150" aria-hidden="true">
+      <rect x="38" y="6" width="24" height="24" rx="3" fill="#2a221c"/>
+      <rect x="43" y="29" width="14" height="9" fill="#b08d57"/>
+      <rect x="14" y="36" width="72" height="108" rx="12" fill="${color}" opacity=".9"/>
+      <rect x="21" y="44" width="8" height="90" rx="4" fill="#fff" opacity=".35"/>
+      <rect x="32" y="80" width="36" height="26" fill="#fff" opacity=".85"/>
+      <text x="50" y="96" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" letter-spacing="2" fill="#1f1a17">LINO</text>
+    </svg>`;
+  }
+
+  function lighten(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const mix = c => Math.round(c + (255 - c) * 0.82);
+    return `rgb(${mix(n >> 16)}, ${mix((n >> 8) & 255)}, ${mix(n & 255)})`;
+  }
+
+  function render(filter) {
+    const box = document.getElementById("products");
+    box.innerHTML = PRODUCTS
+      .filter(p => filter === "all" || p.type === filter)
+      .map(p => `
+        <article class="card">
+          <div class="card-img" style="background:${lighten(p.color)}">
+            ${p.tag ? `<span class="tag">${p.tag}</span>` : ""}
+            ${p.image ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover">` : bottle(p.color)}
+          </div>
+          <div class="card-body">
+            <span class="kind">${typeLabel[p.type]} · ${p.volume}</span>
+            <h3>${p.name}</h3>
+            <p class="notes">${p.notes}</p>
+            <div class="card-foot">
+              <span class="price">${p.price.toLocaleString("ru-RU")} <small>${SHOP.currency}</small></span>
+              <a class="order" target="_blank" rel="noopener"
+                 href="${waLink(`Здравствуйте! Хочу заказать ${p.name} (${p.volume}) за ${p.price} ${SHOP.currency}.`)}">Заказать</a>
+            </div>
+          </div>
+        </article>`).join("");
+  }
+
+  document.querySelectorAll(".filters button").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll(".filters button").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      render(b.dataset.filter);
+    });
+  });
+
+  document.getElementById("wa-main").href = waLink("Здравствуйте! Хочу проконсультироваться по ароматам Lino.");
+  document.getElementById("ig-main").href = "https://instagram.com/" + SHOP.instagram;
+  document.getElementById("tg-main").href = "https://t.me/" + SHOP.telegram;
+  document.getElementById("addr").textContent = SHOP.address;
+  document.getElementById("phone").textContent = SHOP.phone;
+  document.getElementById("hours").textContent = SHOP.hours;
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  render("all");
+</script>
+</body>
+</html>
