@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>NotaDubai — промо-видео</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0e0b09; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0e0b09; color: #f3e7d3; font-family: "Montserrat", sans-serif; }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .bg { position: absolute; inset: -60px; }
+  .serif { font-family: "Cormorant Garamond", serif; }
+  .gold { color: #d4b07a; }
+  .center { position: absolute; left: 0; right: 0; text-align: center; }
+  .label { font-size: 30px; letter-spacing: 10px; text-transform: uppercase; color: #c9a46c; }
+  .big { font-family: "Cormorant Garamond", serif; font-weight: 500; line-height: 1; }
+  .chip { display: inline-block; border: 1.5px solid rgba(212,176,122,.6); border-radius: 60px; padding: 16px 38px; font-size: 32px; letter-spacing: 2px; color: #f3e7d3; }
+  .line { width: 120px; height: 2px; background: #c9a46c; margin: 0 auto; }
+  .spark { position: absolute; border-radius: 50%; background: #f1d39c; }
+  .fade-bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 900px; background: linear-gradient(to bottom, rgba(14,11,9,0), rgba(14,11,9,.92) 55%, #0e0b09); }
+  .pedestal { position: absolute; left: 50%; transform: translateX(-50%); width: 560px; height: 70px; border-radius: 50%; background: radial-gradient(ellipse, rgba(212,176,122,.55), rgba(212,176,122,0) 70%); }
+  .brandmark { position: absolute; top: 90px; left: 0; right: 0; text-align: center; font-family: "Cormorant Garamond", serif; font-size: 46px; letter-spacing: 10px; color: rgba(243,231,211,.75); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+
+<script>
+/* ========= CONTENT (edit here) ========= */
+const BRAND = "NotaDubai";
+const CONTACT = { whatsapp: "+996 700 000 000", instagram: "@notadubai" };
+const MAKER = "Parfums de Marly";
+const PERFUMES = [
+  { name: "Althair",  who: "Для него", notes: "Главная нота — корица",          season: "Для осени и зимы",          color: "#b4683f" },
+  { name: "Layton",   who: "Для него", notes: "Главная нота — яблоко",          season: "С осени до весны",          color: "#2c3e5c" },
+  { name: "Sedley",   who: "Для него", notes: "Главная нота — мята",            season: "Для жарких дней",           color: "#8fb3cf" },
+  { name: "Greenley", who: "Унисекс",  notes: "Главная нота — зелёное яблоко",  season: "На каждый день",            color: "#3e9e6a" },
+  { name: "Castley",  who: "Унисекс",  notes: "Главная нота — бергамот",        season: "Яркий и пряный",            color: "#c9cccf" }
+];
+const ORDINALS = ["Первый", "Второй", "Третий", "Четвёртый", "Пятый"];
+
+/* ========= HELPERS ========= */
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+function shade(hex, f) {
+  const n = parseInt(hex.slice(1), 16);
+  const m = c => Math.round(f < 0 ? c * (1 + f) : c + (255 - c) * f);
+  return `rgb(${m(n >> 16)},${m((n >> 8) & 255)},${m(n & 255)})`;
+}
+function bottle(color, w, id, label = MAKER.toUpperCase()) {
+  return `<svg width="${w}" viewBox="0 0 200 300" style="display:block;overflow:visible">
+    <defs>
+      <linearGradient id="g${id}" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="${shade(color, .35)}"/><stop offset="1" stop-color="${shade(color, -.25)}"/>
+      </linearGradient>
+      <linearGradient id="c${id}" x1="0" x2="1"><stop offset="0" stop-color="#d9d9d9"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#9a9a9a"/></linearGradient>
+    </defs>
+    <rect x="74" y="8" width="52" height="56" rx="5" fill="url(#c${id})"/>
+    <rect x="84" y="62" width="32" height="18" fill="#b08d57"/>
+    <rect x="22" y="78" width="156" height="214" rx="20" fill="url(#g${id})"/>
+    <rect x="36" y="92" width="18" height="180" rx="9" fill="#fff" opacity=".28"/>
+    <rect x="44" y="160" width="112" height="60" fill="#fff" opacity=".88"/>
+    <text x="100" y="192" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="${label.length > 9 ? 11 : 15}" letter-spacing="1.5" fill="#1f1a17">${label}</text>
+    <text x="100" y="208" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" letter-spacing="1.2" fill="#6f655c">PARFUMS DE MARLY</text>
+  </svg>`;
+}
+function sparks(seed, n) {
+  let s = seed, out = [];
+  const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < n; i++) out.push({ x: r() * 1080, y: r() * 1500 + 100, z: r() * 5 + 2, sp: r() * 60 + 30, ph: r() * 6.28 });
+  return out;
+}
+
+/* ========= SCENES ========= */
+const scenes = [];
+let cursor = 0;
+function add(dur, html, update) { scenes.push({ start: cursor, dur, html, update }); cursor += dur; }
+
+// 1. Intro
+add(3.6, () => `
+  <div class="bg" style="background: radial-gradient(circle at 50% 45%, #3a2b1d 0%, #0e0b09 60%)"></div>
+  <div class="sparks"></div>
+  <div class="center" style="top:700px">
+    <div class="label" data-a="lab">Парфюмерный магазин</div>
+    <div class="big gold" data-a="logo" style="font-size:190px;letter-spacing:20px;margin:40px 0 30px 0">${BRAND}</div>
+    <div class="line" data-a="line"></div>
+    <div class="serif" data-a="sub" style="font-size:64px;font-style:italic;margin-top:46px">Найдите свой аромат</div>
+  </div>`,
+  (el, p, t) => {
+    q(el, "lab").style.cssText += `;opacity:${easeOut(prog(t,.2,1))};transform:translateY(${(1-easeOut(prog(t,.2,1)))*30}px)`;
+    q(el, "logo").style.cssText += `;opacity:${easeOut(prog(t,.4,1.6))};letter-spacing:${20 - 18*easeOut(prog(t,.4,2.4))}px;`;
+    q(el, "line").style.width = 300 * easeOut(prog(t, 1, 2)) + "px";
+    q(el, "sub").style.opacity = easeOut(prog(t, 1.5, 2.4));
+  });
+
+// 2. Lineup
+add(4.2, () => `
+  <div class="bg" style="background: radial-gradient(ellipse at 50% 55%, #3b2c1e 0%, #0e0b09 65%)"></div>
+  <div class="sparks"></div>
+  <div class="brandmark">${BRAND}</div>
+  <div class="center" style="top:300px">
+    <div class="label" data-a="t1">Французский люкс</div>
+    <div class="big" data-a="t2" style="font-size:112px;margin-top:30px">5 лучших ароматов</div>
+    <div class="big gold" data-a="t3" style="font-size:112px;font-style:italic">${MAKER}</div>
+  </div>
+  <div class="pedestal" style="top:1330px;width:1000px;height:90px"></div>
+  <div data-a="row" style="position:absolute;top:960px;left:0;right:0;display:flex;justify-content:center;gap:14px;align-items:flex-end">
+    ${PERFUMES.map((p, i) => `<div data-b="${i}">${bottle(p.color, 170, "r"+i, p.name.toUpperCase())}</div>`).join("")}
+  </div>
+  <div class="center" data-a="names" style="top:1440px;font-size:26px;letter-spacing:4px;color:#b9a68a;text-transform:uppercase">
+    ${PERFUMES.map(p => p.name).join("  ·  ")}
+  </div>`,
+  (el, p, t) => {
+    ["t1","t2","t3"].forEach((k, i) => { const x = easeOut(prog(t, .1 + i*.25, .9 + i*.25)); q(el,k).style.cssText += `;opacity:${x};transform:translateY(${(1-x)*40}px)`; });
+    PERFUMES.forEach((_, i) => { const x = easeOut(prog(t, .5 + i*.15, 1.3 + i*.15)); el.querySelector(`[data-b="${i}"]`).style.cssText = `opacity:${x};transform:translateY(${(1-x)*120}px)`; });
+    q(el, "names").style.opacity = easeOut(prog(t, 1.8, 2.6));
+  });
+
+// 3–8. Each perfume
+PERFUMES.forEach((pf, i) => add(3.4, () => `
+  <div class="bg" style="background: radial-gradient(circle at 50% 40%, ${shade(pf.color, -.35)} 0%, ${shade(pf.color, -.82)} 45%, #0e0b09 75%)"></div>
+  <div class="sparks"></div>
+  <div class="brandmark">${BRAND}</div>
+  <div data-a="glow" style="position:absolute;left:50%;top:700px;width:760px;height:760px;margin:-380px 0 0 -380px;border-radius:50%;background:radial-gradient(circle, ${shade(pf.color, .2)}55 0%, transparent 65%)"></div>
+  <div class="pedestal" style="top:1060px"></div>
+  <div data-a="bottle" style="position:absolute;left:50%;top:260px;transform-origin:50% 100%">${bottle(pf.color, 440, "p"+i, pf.name.toUpperCase())}</div>
+  <div class="fade-bottom"></div>
+  <div class="center" style="top:1170px">
+    <div class="label" data-a="ord">${ORDINALS[i]} · ${pf.who}</div>
+    <div class="big gold" data-a="name" style="font-size:150px;margin:26px 0 30px">${pf.name}</div>
+    <div data-a="notes" style="font-size:40px;color:#e9dcc6;letter-spacing:1px">${pf.notes}</div>
+    <div data-a="season" style="margin-top:48px"><span class="chip">✦ ${pf.season}</span></div>
+  </div>`,
+  (el, p, t) => {
+    const b = q(el, "bottle");
+    const inX = easeOut(prog(t, 0, .9));
+    const zoom = 0.92 + 0.08 * ease(prog(t, 0, 3.4));
+    b.style.transform = `translateX(-50%) translateY(${(1-inX)*160 + Math.sin(t*1.6)*8}px) scale(${zoom})`;
+    b.style.opacity = inX;
+    q(el, "glow").style.opacity = .6 + .4 * Math.sin(t * 2);
+    [["ord",.35],["name",.55],["notes",.85],["season",1.15]].forEach(([k, d]) => {
+      const x = easeOut(prog(t, d, d + .7));
+      q(el, k).style.cssText += `;opacity:${x};transform:translateY(${(1-x)*50}px)`;
+    });
+  }));
+
+// 9. Offer
+add(4.6, () => `
+  <div class="bg" style="background: radial-gradient(circle at 50% 35%, #3a2b1d 0%, #0e0b09 62%)"></div>
+  <div class="sparks"></div>
+  <div class="brandmark">${BRAND}</div>
+  <div class="center" style="top:300px">
+    <div class="label" data-a="l">Выгодный набор</div>
+    <div class="serif" data-a="from" style="font-size:66px;margin-top:40px">Все 5 ароматов по 10 мл</div>
+    <div class="big gold" data-a="price" style="font-size:260px;margin-top:20px">−20%</div>
+    <div class="serif" data-a="cur" style="font-size:62px;font-style:italic">при покупке набора</div>
+  </div>
+  <div class="pedestal" style="top:1290px;width:1000px;height:90px"></div>
+  <div style="position:absolute;top:1010px;left:0;right:0;display:flex;justify-content:center;gap:14px;align-items:flex-end">
+    ${PERFUMES.map((p, k) => `<div data-c="${k}">${bottle(p.color, 150, "o"+k, p.name.toUpperCase())}</div>`).join("")}
+  </div>
+  <div class="center" data-a="vol" style="top:1450px;font-size:38px;letter-spacing:2px;color:#e9dcc6">Также есть 30 мл · 50 мл · 100 мл</div>`,
+  (el, p, t) => {
+    [["l",.1],["from",.3],["price",.55],["cur",.8]].forEach(([k, d]) => { const x = easeOut(prog(t, d, d+.7)); q(el,k).style.cssText += `;opacity:${x};transform:scale(${.9+.1*x})`; });
+    for (let k = 0; k < PERFUMES.length; k++) { const x = easeOut(prog(t, 1.2 + k*.15, 1.9 + k*.15)); el.querySelector(`[data-c="${k}"]`).style.cssText = `opacity:${x};transform:translateY(${(1-x)*100}px)`; }
+    q(el, "vol").style.opacity = easeOut(prog(t, 2.2, 3));
+  });
+
+// 10. Call to action
+add(4.8, () => `
+  <div class="bg" style="background: radial-gradient(circle at 50% 50%, #44321f 0%, #0e0b09 62%)"></div>
+  <div class="sparks"></div>
+  <div class="center" style="top:430px">
+    <div class="big gold" data-a="logo" style="font-size:170px;letter-spacing:2px">${BRAND}</div>
+    <div class="line" data-a="line" style="margin-top:30px"></div>
+    <div class="serif" data-a="h" style="font-size:96px;margin-top:70px;line-height:1.1">Закажите свой<br><i class="gold">аромат</i> сегодня</div>
+  </div>
+  <div class="center" style="top:1180px">
+    <div data-a="wa" style="display:inline-block;background:#c9a46c;color:#1a130d;font-weight:600;font-size:42px;letter-spacing:3px;padding:34px 70px;text-transform:uppercase">Написать в WhatsApp</div>
+    <div data-a="ph" style="font-size:52px;margin-top:50px;letter-spacing:2px">${CONTACT.whatsapp}</div>
+    <div data-a="ig" style="font-size:40px;margin-top:22px;color:#c9a46c;letter-spacing:2px">Instagram ${CONTACT.instagram}</div>
+  </div>`,
+  (el, p, t) => {
+    const x = easeOut(prog(t, .1, 1.1));
+    q(el, "logo").style.cssText += `;opacity:${x};transform:scale(${1.1 - .1*x})`;
+    q(el, "line").style.width = 300 * easeOut(prog(t, .6, 1.4)) + "px";
+    [["h",.8],["wa",1.3],["ph",1.6],["ig",1.8]].forEach(([k, d]) => { const y = easeOut(prog(t, d, d+.7)); q(el,k).style.cssText += `;opacity:${y};transform:translateY(${(1-y)*40}px)`; });
+    q(el, "wa").style.boxShadow = `0 0 ${40 + 30*Math.sin(t*3)}px rgba(212,176,122,.45)`;
+  });
+
+const TOTAL = cursor;
+const FADE = 0.35;
+
+/* ========= ENGINE ========= */
+function q(el, k) { return el.querySelector(`[data-a="${k}"]`); }
+const stage = document.getElementById("stage");
+scenes.forEach((s, i) => {
+  const d = document.createElement("div");
+  d.className = "scene";
+  d.innerHTML = s.html();
+  const sp = d.querySelector(".sparks");
+  if (sp) {
+    s.sparks = sparks(i * 77 + 13, 34);
+    sp.innerHTML = s.sparks.map(() => `<div class="spark"></div>`).join("");
+  }
+  stage.appendChild(d);
+  s.el = d;
+});
+
+window.TOTAL = TOTAL;
+window.renderAt = function (t) {
+  scenes.forEach(s => {
+    const lt = t - s.start;
+    const visible = lt > -FADE && lt < s.dur + FADE;
+    if (!visible) { s.el.style.opacity = 0; s.el.style.display = "none"; return; }
+    s.el.style.display = "block";
+    const fin = s.start === 0 ? 1 : clamp((lt + FADE) / (2*FADE));
+    const fout = s.start + s.dur >= TOTAL ? 1 : clamp((s.dur + FADE - lt) / (2*FADE));
+    s.el.style.opacity = Math.min(fin, fout);
+    const bg = s.el.querySelector(".bg");
+    bg.style.transform = `scale(${1 + 0.05 * clamp(lt / s.dur)})`;
+    if (s.sparks) {
+      s.el.querySelectorAll(".spark").forEach((n, k) => {
+        const p = s.sparks[k];
+        const y = ((p.y - lt * p.sp) % 1700 + 1700) % 1700 + 100;
+        n.style.cssText = `left:${p.x}px;top:${y}px;width:${p.z}px;height:${p.z}px;opacity:${.25 + .55 * (0.5 + 0.5 * Math.sin(lt * 2 + p.ph))};box-shadow:0 0 ${p.z*3}px #f1d39c`;
+      });
+    }
+    s.update(s.el, clamp(lt / s.dur), Math.max(0, lt));
+  });
+};
+window.renderAt(0);
+</script>
+</body>
+</html>
