@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:720px;height:1280px;overflow:hidden;background:transparent}
+#st{position:relative;width:720px;height:1280px;font-family:Montserrat,sans-serif;color:#fff}
+.abs{position:absolute}
+.cap{position:absolute;left:0;right:0;top:850px;text-align:center}
+.s{font-size:25px;font-weight:500;color:#eee;line-height:1.3;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.b{font-size:54px;font-weight:800;line-height:1.1;margin-top:6px;letter-spacing:.5px;text-shadow:0 3px 10px rgba(0,0,0,.6)}
+.g{color:#e2b866}
+.sub{font-size:22px;color:#cfc6b8;margin-top:6px}
+.chip{position:absolute;height:50px;border-radius:25px;background:rgba(40,34,30,.97);border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;gap:7px;font-size:21px;font-weight:500;color:#fff;padding:0 14px;white-space:nowrap}
+.panel{position:absolute;left:58px;width:602px;border-radius:18px;background:rgba(28,24,22,.97);border:1px solid rgba(255,255,255,.12);padding:20px 24px}
+.ph{font-size:15px;letter-spacing:3px;color:#d8b16a;font-weight:600}
+.pt{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:27px;color:#fff;margin:2px 0 10px}
+.row{display:flex;align-items:center;gap:12px;font-size:19px;color:#ddd;margin:7px 0}
+.row .n{width:150px}.row .bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.12);position:relative}
+.row .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:#8d8478}
+.row .v{width:80px;text-align:right}
+.tag{display:inline-block;border:1.5px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 15px;font-size:20px;margin:4px;color:#ddd}
+.tag.on{border-color:#d8b16a;color:#e2b866;background:rgba(216,177,106,.12)}
+.mark{position:absolute;left:0;right:0;bottom:46px;text-align:center;font-family:"Cormorant Garamond",serif;font-size:30px;letter-spacing:8px;color:rgba(226,184,102,.85)}
+#end{position:absolute;inset:0;background:url(endbg.jpg) center/cover;display:none}
+</style></head><body><div id="st"></div>
+<script>
+const CONTACT = { whatsapp: "+996 700 000 000", instagram: "@notadubai" };
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const eo=x=>1-Math.pow(1-clamp(x),3);
+// captions: [start, end, small, big, sub, bigGold]
+const CAPS=[
+ [0.0,4.6,"Дорогой и роскошный французский бренд<br>Parfums de Marly — его лучшие","5 АРОМАТОВ","",true],
+ [4.6,6.5,"Досмотрите до конца —","НАЗОВЁМ ЦЕНЫ","",false],
+ [7.0,8.5,"Первый,","ALTHAÏR","",true],
+ [8.5,11.8,"Признан лучшим в 2024 году","МУЖСКОЙ АРОМАТ","по версии Fragrantica",false],
+ [11.8,15.2,"Главная нота","КОРИЦА","ваниль и карамель",false],
+ [15.2,17.6,"","ОСЕНЬ И ЗИМА","особенно хорош вечером",false],
+ [18.5,19.6,"Второй,","LAYTON","",true],
+ [19.6,22.0,"На сайте Fragrantica","САМЫЙ ПОПУЛЯРНЫЙ","аромат бренда",false],
+ [22.0,24.8,"Главная нота","ЯБЛОКО","лаванда и ваниль",false],
+ [24.8,27.0,"","С ОСЕНИ ДО ВЕСНЫ","лучшее время носить",false],
+ [27.5,28.5,"Третий,","SEDLEY","",true],
+ [28.5,31.0,"Многие описывают его как","СВЕЖИЙ И БОДРЯЩИЙ","",false],
+ [31.0,33.2,"Главная нота","МЯТА","лимон и сандал",false],
+ [33.2,35.6,"Летом,","В ЖАРКИЕ ДНИ","идеален",false],
+ [36.4,37.6,"Четвёртый,","GREENLEY","",true],
+ [37.6,39.6,"Четыре из пяти человек","НОСЯТ ЕГО ДНЁМ","",false],
+ [39.6,42.3,"Главная нота","ЗЕЛЁНОЕ ЯБЛОКО","мандарин и кедр",false],
+ [42.3,45.2,"Для работы, учёбы и","КАЖДОГО ДНЯ","",false],
+ [45.9,47.0,"Последний,","CASTLEY","",true],
+ [47.0,48.9,"Вышел в прошлом году —","НОВИНКА","",false],
+ [48.9,51.3,"Главная нота","БЕРГАМОТ","имбирь и чёрный перец",false],
+ [51.3,54.3,"","ЯРКИЙ, ПРЯНЫЙ<br><span class='g'>И РОСКОШНЫЙ</span>","",false],
+];
+// chips: [start,end,x,y,w,label,icon]
+const CHIPS=[
+ [15.4,17.6,100,226,160,"осенью","🍂"],[15.9,17.6,452,226,176,"зимой","❄"],
+ [24.9,27.0,70,226,125,"осень","🍂"],[25.2,27.0,292,226,125,"зима","❄"],[25.6,27.0,510,226,150,"весна","🌸"],
+ [42.4,45.2,56,226,150,"работа","💼"],[42.8,45.2,248,226,220,"учёба","📖"],[43.3,45.2,480,226,190,"каждый день","☀"],
+];
+const PANELS=[
+ [19.5,22.0,150,350,`<div class="ph">FRAGRANTICA · PARFUMS DE MARLY</div><div class="pt">самые высоко оценённые ароматы</div>
+   ${[["Layton",19856,1,1],["Delina",14361,.72],["Althaïr",11981,.6],["Herod",10337,.52],["Delina Exclusif",7131,.36]].map(r=>`<div class="row" style="${r[3]?'color:#e2b866;font-weight:600':''}"><span class="n">${r[0]}</span><span class="bar"><i style="width:${r[2]*100}%;${r[3]?'background:#d8b16a':''}"></i></span><span class="v">${r[1].toLocaleString('ru-RU')}</span></div>`).join("")}
+   <div style="text-align:right;font-size:15px;color:#aaa;margin-top:6px">число оценок · 49 ароматов бренда</div>`],
+ [28.9,31.0,150,262,`<div class="ph">FRAGRANTICA · SEDLEY</div><div class="pt">частые слова в отзывах</div>
+   <div style="text-align:center"><span class="tag on">бодрящий</span><span class="tag">цитрусовый</span><span class="tag">летний</span><span class="tag">мятный</span><br><span class="tag on">свежий</span></div>
+   <div style="text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#aaa;margin-top:6px">последние 210 отзывов · 2026</div>`],
+ [37.9,39.6,150,270,`<div class="ph">FRAGRANTICA · GREENLEY</div><div class="pt">когда носят — голоса</div>
+   <div style="text-align:center;font-size:34px;letter-spacing:14px;color:#d8b16a">☀☀☀☀<span style="color:#aaa">☾</span></div>
+   <div style="height:6px;border-radius:3px;background:rgba(255,255,255,.12);margin:12px 0 8px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:80%;border-radius:3px;background:#d8b16a"></i></div>
+   <div style="display:flex;justify-content:space-between;font-weight:700;color:#e2b866;font-size:20px"><span>ДНЁМ 80%</span><span style="color:#aaa">ВЕЧЕРОМ 16%</span></div>`],
+];
+const CUT=59.4, END=5.0;
+window.TOTAL=CUT+END;
+const st=document.getElementById("st");
+// bottom cover
+st.insertAdjacentHTML("beforeend",`<div class="abs" id="bot" style="left:0;right:0;top:780px;bottom:0;background:linear-gradient(to bottom,rgba(14,10,8,0),rgba(14,10,8,.97) 70px,#0e0a08)"></div>
+<div class="abs" id="top" style="left:0;right:0;top:0;height:0;background:linear-gradient(to bottom,#0e0a08 0,#0e0a08 90%,rgba(14,10,8,0))"></div>
+<div id="layer"></div><div class="mark" id="mark">NotaDubai</div>
+<div id="end"><div style="position:absolute;left:0;right:0;top:330px;text-align:center">
+ <div id="e1" style="font-family:'Cormorant Garamond',serif;font-size:96px;font-weight:600;color:#e2b866;letter-spacing:2px">NotaDubai</div>
+ <div id="e2" style="width:200px;height:2px;background:#d8b16a;margin:18px auto 40px"></div>
+ <div id="e3" style="font-size:40px;font-weight:700;line-height:1.25">ЗАКАЖИТЕ СВОЙ<br><span class="g">АРОМАТ СЕГОДНЯ</span></div>
+ <div id="e4" style="display:inline-block;margin-top:70px;background:#d8b16a;color:#1a130d;font-weight:700;font-size:26px;letter-spacing:2px;padding:22px 44px">НАПИСАТЬ В WHATSAPP</div>
+ <div id="e5" style="font-size:32px;margin-top:34px">${CONTACT.whatsapp}</div>
+ <div id="e6" style="font-size:24px;margin-top:12px;color:#e2b866">Instagram ${CONTACT.instagram}</div>
+ <div id="e7" style="font-size:22px;margin-top:40px;color:#cfc6b8">Доставка по всей стране</div>
+</div></div>`);
+const layer=document.getElementById("layer");
+function fade(t,a,b,d=.3){return Math.min(eo((t-a)/d),eo((b-t)/.2))}
+window.renderAt=function(t){
+  let h="";
+  const endOn=t>=CUT;
+  document.getElementById("end").style.display=endOn?"block":"none";
+  if(endOn){
+    const e=t-CUT;
+    [["e1",0],["e2",.3],["e3",.5],["e4",.9],["e5",1.1],["e6",1.3],["e7",1.5]].forEach(([id,d])=>{const x=eo((e-d)/.6);const n=document.getElementById(id);n.style.opacity=x;n.style.transform=`translateY(${(1-x)*30}px)`});
+    document.getElementById("end").style.opacity=eo(e/.4);
+    layer.innerHTML="";return;
+  }
+  // captions
+  for(const c of CAPS){ if(t<c[0]-.01||t>c[1]) continue; const x=fade(t,c[0],c[1]);
+    h+=`<div class="cap" style="opacity:${x};transform:translateY(${(1-eo((t-c[0])/.35))*24}px)">
+      ${c[2]?`<div class="s">${c[2]}</div>`:""}<div class="b ${c[5]?'g':''}">${c[3]}</div>${c[4]?`<div class="sub">${c[4]}</div>`:""}</div>`; }
+  for(const c of CHIPS){ if(t<c[0]||t>c[1]) continue; const x=fade(t,c[0],c[1],.25);
+    h+=`<div class="chip" style="left:${c[2]}px;top:${c[3]}px;width:${c[4]}px;opacity:${x}"><span>${c[6]}</span>${c[5]}</div>`; }
+  for(const p of PANELS){ if(t<p[0]||t>p[1]) continue; const x=fade(t,p[0],p[1],.3);
+    h+=`<div class="panel" style="top:${p[2]}px;min-height:${p[3]}px;opacity:${x}">${p[4]}</div>`; }
+  // price scene
+  const top=document.getElementById("top");
+  if(t>=54.2&&t<CUT){
+    top.style.height="470px"; top.style.opacity=eo((t-54.2)/.3);
+    if(t<56.6){ const x=fade(t,54.4,56.6);
+      h+=`<div class="abs" style="left:0;right:0;top:165px;text-align:center;opacity:${x}"><div class="s">Все ароматы</div><div class="b g" style="font-size:58px">ОТ 170 000 СУМ</div>
+      <div style="display:inline-block;margin-top:60px;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:9px 24px;font-size:22px">10 мл · цена NotaDubai</div></div>`;
+    } else { const x=fade(t,56.6,CUT+1);
+      h+=`<div class="abs" style="left:0;right:0;top:165px;text-align:center;opacity:${x}"><div class="s">Если возьмёте все сразу —</div><div class="b" style="font-size:62px">СКИДКА <span class="g">20%</span></div></div>
+      <div class="abs" style="left:0;right:0;top:860px;text-align:center;opacity:${x}">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:31px;line-height:1.3">30 мл — 420 000 · 50 мл — 680 000<br>100 мл — 1 190 000</div>
+        <div style="display:inline-block;margin-top:20px;border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 22px;font-size:21px">5 × 10 мл: <s style="color:#c98080">850 000</s> → <b class="g" style="font-size:25px">680 000 сум</b></div></div>`;
+    }
+  } else top.style.height="0px";
+  layer.innerHTML=h;
+};
+window.renderAt(0);
+</script></body></html>
