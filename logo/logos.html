@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>NotaDubai logos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Cinzel:wght@500;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1500px;background:#e9e3da;font-family:Montserrat,sans-serif;padding:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.c{height:440px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.dark{background:#0f0c0a}.light{background:#faf6ef}
+.n{position:absolute;top:14px;left:18px;font-size:16px;font-weight:500;color:#999}
+svg{display:block}
+</style></head><body>
+
+<!-- 1: Arch monogram -->
+<div class="c dark" id="l1"><span class="n">1</span>
+<svg width="360" height="360" viewBox="0 0 360 360">
+  <defs><linearGradient id="gd" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#f3d9a0"/><stop offset=".5" stop-color="#c9a15e"/><stop offset="1" stop-color="#8e6a33"/></linearGradient></defs>
+  <path d="M110 250 V150 A70 70 0 0 1 250 150 V250" fill="none" stroke="url(#gd)" stroke-width="3"/>
+  <path d="M124 250 V152 A56 56 0 0 1 236 152 V250" fill="none" stroke="url(#gd)" stroke-width="1"/>
+  <text x="180" y="208" text-anchor="middle" font-family="Cormorant Garamond" font-size="64" font-weight="500" fill="url(#gd)">ND</text>
+  <circle cx="180" cy="104" r="4" fill="url(#gd)"/>
+  <text x="180" y="300" text-anchor="middle" font-family="Cinzel" font-size="30" letter-spacing="8" fill="url(#gd)">NOTADUBAI</text>
+  <text x="180" y="328" text-anchor="middle" font-family="Montserrat" font-weight="300" font-size="11" letter-spacing="6" fill="#bfa77c">PARFUMERIE</text>
+</svg></div>
+
+<!-- 2: Wordmark with drop -->
+<div class="c light" id="l2"><span class="n">2</span>
+<svg width="440" height="300" viewBox="0 0 440 300">
+  <defs><linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#b8904f"/><stop offset="1" stop-color="#7d5a28"/></linearGradient></defs>
+  <path d="M220 50 C 236 76 248 90 248 108 A28 28 0 0 1 192 108 C 192 90 204 76 220 50 Z" fill="url(#gl)"/>
+  <text x="220" y="196" text-anchor="middle" font-family="Cormorant Garamond" font-size="72" font-weight="500" fill="#1d1714"><tspan>Nota</tspan><tspan font-style="italic" fill="url(#gl)">Dubai</tspan></text>
+  <line x1="150" y1="222" x2="200" y2="222" stroke="#b8904f" stroke-width="1"/>
+  <line x1="240" y1="222" x2="290" y2="222" stroke="#b8904f" stroke-width="1"/>
+  <text x="220" y="227" text-anchor="middle" font-family="Montserrat" font-size="11" letter-spacing="4" fill="#7d5a28">✦</text>
+  <text x="220" y="256" text-anchor="middle" font-family="Montserrat" font-weight="300" font-size="12" letter-spacing="7" fill="#6f655c">ОРИГИНАЛЬНАЯ ПАРФЮМЕРИЯ</text>
+</svg></div>
+
+<!-- 3: Bottle + skyline -->
+<div class="c dark" id="l3"><span class="n">3</span>
+<svg width="380" height="380" viewBox="0 0 380 380">
+  <defs><linearGradient id="g3" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f3d9a0"/><stop offset="1" stop-color="#a77d3e"/></linearGradient></defs>
+  <circle cx="190" cy="150" r="104" fill="none" stroke="url(#g3)" stroke-width="2"/>
+  <!-- skyline inside circle -->
+  <g fill="url(#g3)" opacity=".9">
+    <rect x="112" y="190" width="14" height="30"/><rect x="130" y="176" width="12" height="44"/>
+    <path d="M228 220 V150 L236 92 L244 150 V220 Z"/>
+    <rect x="250" y="182" width="14" height="38"/><rect x="146" y="196" width="10" height="24"/>
+  </g>
+  <!-- bottle -->
+  <rect x="176" y="96" width="28" height="22" rx="3" fill="url(#g3)"/>
+  <rect x="160" y="120" width="60" height="100" rx="10" fill="#0f0c0a" stroke="url(#g3)" stroke-width="3"/>
+  <text x="190" y="178" text-anchor="middle" font-family="Cinzel" font-size="22" fill="url(#g3)">N</text>
+  <line x1="92" y1="220" x2="288" y2="220" stroke="url(#g3)" stroke-width="2"/>
+  <text x="190" y="300" text-anchor="middle" font-family="Cinzel" font-size="40" letter-spacing="6" fill="url(#g3)">NOTA DUBAI</text>
+  <text x="190" y="330" text-anchor="middle" font-family="Montserrat" font-weight="300" font-size="12" letter-spacing="7" fill="#bfa77c">LUXURY PERFUMES</text>
+</svg></div>
+</body></html>
