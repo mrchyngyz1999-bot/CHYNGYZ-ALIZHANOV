@@ -39,7 +39,7 @@ const eo=x=>1-Math.pow(1-clamp(x),3);
 // captions: [start, end, small, big, sub, bigGold]
 const CAPS=[
  [0.0,4.6,"Дорогой и роскошный французский бренд<br>Parfums de Marly — его лучшие","5 АРОМАТОВ","",true],
- [4.6,6.5,"Досмотрите до конца —","НАЗОВЁМ ЦЕНЫ","",false],
+ [4.6,6.5,"Какой из них ваш?","ВЫБИРАЙТЕ","",false],
  [7.0,8.5,"Первый,","ALTHAÏR","",true],
  [8.5,11.8,"Признан лучшим в 2024 году","МУЖСКОЙ АРОМАТ","по версии Fragrantica",false],
  [11.8,15.2,"Главная нота","КОРИЦА","ваниль и карамель",false],
@@ -83,17 +83,24 @@ const CUT=59.4, END=5.0;
 window.TOTAL=CUT+END;
 const st=document.getElementById("st");
 // bottom cover
-st.insertAdjacentHTML("beforeend",`<div class="abs" id="bot" style="left:0;right:0;top:780px;bottom:0;background:linear-gradient(to bottom,rgba(14,10,8,0),rgba(14,10,8,.97) 70px,#0e0a08)"></div>
+st.insertAdjacentHTML("beforeend",`<div class="abs" id="bot" style="left:0;right:0;top:780px;bottom:0;background:linear-gradient(to bottom,rgba(14,10,8,0),#0e0a08 60px,#0e0a08)"></div>
 <div class="abs" id="top" style="left:0;right:0;top:0;height:0;background:linear-gradient(to bottom,#0e0a08 0,#0e0a08 90%,rgba(14,10,8,0))"></div>
 <div id="layer"></div><div class="mark" id="mark" style="bottom:22px">${LOGO(130)}</div>
+<div id="info" style="position:absolute;inset:0;background:url(endbg.jpg) center/cover;display:none"><div style="position:absolute;left:0;right:0;top:300px;text-align:center">
+ <div id="i1" class="s" style="letter-spacing:4px;color:#d8b16a;font-size:22px">PARFUMS DE MARLY · ОРИГИНАЛ</div>
+ <div id="i2" class="b" style="font-size:60px;margin-top:22px">ВСЕ 5 АРОМАТОВ<br><span class="g">В НАЛИЧИИ</span></div>
+ <div id="i3" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:40px;margin-top:40px">10 мл · 30 мл · 50 мл · 100 мл</div>
+ <div id="i4" style="display:inline-block;margin-top:60px;border:1.5px solid rgba(216,177,106,.7);border-radius:40px;padding:18px 40px;font-size:30px;font-weight:600">Узнать цену — <span class="g">пишите в Direct</span></div>
+ <div id="i5" style="font-size:24px;margin-top:30px;color:#cfc6b8">Доставка по всему Кыргызстану</div>
+</div></div>
 <div id="end"><div style="position:absolute;left:0;right:0;top:190px;text-align:center">
  <div id="e1">${LOGO(330)}</div>
  <div id="e2" style="width:200px;height:2px;background:#d8b16a;margin:10px auto 36px"></div>
  <div id="e3" style="font-size:40px;font-weight:700;line-height:1.25">ЗАКАЖИТЕ СВОЙ<br><span class="g">АРОМАТ СЕГОДНЯ</span></div>
- <div id="e4" style="display:inline-block;margin-top:70px;background:#d8b16a;color:#1a130d;font-weight:700;font-size:26px;letter-spacing:2px;padding:22px 44px">НАПИСАТЬ В WHATSAPP</div>
- <div id="e5" style="font-size:32px;margin-top:34px">${CONTACT.whatsapp}</div>
- <div id="e6" style="font-size:24px;margin-top:12px;color:#e2b866">Instagram ${CONTACT.instagram}</div>
- <div id="e7" style="font-size:22px;margin-top:40px;color:#cfc6b8">Доставка по всей стране</div>
+ <div id="e4" style="display:inline-block;margin-top:70px;background:#d8b16a;color:#1a130d;font-weight:700;font-size:26px;letter-spacing:2px;padding:22px 44px">НАПИСАТЬ В DIRECT</div>
+ <div id="e5" style="font-size:36px;margin-top:34px;font-weight:600">@notadubai.kg</div>
+ <div id="e6" style="font-size:24px;margin-top:12px;color:#e2b866">Instagram</div>
+ <div id="e7" style="font-size:22px;margin-top:40px;color:#cfc6b8">Доставка по всему Кыргызстану</div>
 </div></div>`);
 const layer=document.getElementById("layer");
 function fade(t,a,b,d=.3){return Math.min(eo((t-a)/d),eo((b-t)/.2))}
@@ -117,18 +124,12 @@ window.renderAt=function(t){
     h+=`<div class="panel" style="top:${p[2]}px;min-height:${p[3]}px;opacity:${x}">${p[4]}</div>`; }
   // price scene
   const top=document.getElementById("top");
-  if(t>=54.2&&t<CUT){
-    top.style.height="470px"; top.style.opacity=eo((t-54.2)/.3);
-    if(t<56.6){ const x=fade(t,54.4,56.6);
-      h+=`<div class="abs" style="left:0;right:0;top:165px;text-align:center;opacity:${x}"><div class="s">Все ароматы</div><div class="b g" style="font-size:58px">ОТ 170 000 СУМ</div>
-      <div style="display:inline-block;margin-top:60px;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:9px 24px;font-size:22px">10 мл · цена NotaDubai</div></div>`;
-    } else { const x=fade(t,56.6,CUT+1);
-      h+=`<div class="abs" style="left:0;right:0;top:165px;text-align:center;opacity:${x}"><div class="s">Если возьмёте все сразу —</div><div class="b" style="font-size:62px">СКИДКА <span class="g">20%</span></div></div>
-      <div class="abs" style="left:0;right:0;top:860px;text-align:center;opacity:${x}">
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:31px;line-height:1.3">30 мл — 420 000 · 50 мл — 680 000<br>100 мл — 1 190 000</div>
-        <div style="display:inline-block;margin-top:20px;border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 22px;font-size:21px">5 × 10 мл: <s style="color:#c98080">850 000</s> → <b class="g" style="font-size:25px">680 000 сум</b></div></div>`;
-    }
-  } else top.style.height="0px";
+  const info=document.getElementById("info");
+  if(t>=54.3&&t<CUT){
+    const e=t-54.3; info.style.display="block"; info.style.opacity=eo(e/.4);
+    [["i1",.1],["i2",.35],["i3",.7],["i4",1.1],["i5",1.5]].forEach(([id,d])=>{const x=eo((e-d)/.6);const n=document.getElementById(id);n.style.opacity=x;n.style.transform=`translateY(${(1-x)*30}px)`});
+  } else info.style.display="none";
+  top.style.height="0px";
   layer.innerHTML=h;
 };
 window.renderAt(0);
